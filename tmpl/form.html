@@ -1,0 +1,17 @@
+<html>
+
+<head>
+  <title>Microblog - Add post</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+  {{if .Error}} {{ .Error }} {{end}}
+  <form action="/create" method="post">
+    title:<input type="text" name="title"> 
+    text:<input type="text" name="text">
+    <input type="submit" value="create">
+  </form>
+</body>
+
+</html>
