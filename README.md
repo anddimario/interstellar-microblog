@@ -17,14 +17,14 @@ Create an sqlite database with the table:
 Then configure redis:    
 ```
 set config:localhost:3000:db_path /path/where/your/db/is/foo.sqlite3
-hset vhost:localhost:3000:/create method POST
-hset vhost:localhost:3000:/create commands "cd /path/where/your/build/is && ./create"
-hset vhost:localhost:3000:/ method GET
-hset vhost:localhost:3000:/ commands "cd /path/where/your/build/is && ./retrieve"
-hset vhost:localhost:3000:/delete method DELETE
-hset vhost:localhost:3000:/delete commands "cd /path/where/your/build/is && ./delete"
-hset vhost:localhost:3000:/form method GET
-hset vhost:localhost:3000:/form commands "cd /path/where/your/build/is && ./form"
+hset interstellar:vhost:localhost:3000:/create method POST
+hset interstellar:vhost:localhost:3000:/create commands "cd /path/where/your/build/is && ./create"
+hset interstellar:vhost:localhost:3000:/ method GET
+hset interstellar:vhost:localhost:3000:/ commands "cd /path/where/your/build/is && ./retrieve"
+hset interstellar:vhost:localhost:3000:/delete method DELETE
+hset interstellar:vhost:localhost:3000:/delete commands "cd /path/where/your/build/is && ./delete"
+hset interstellar:vhost:localhost:3000:/form method GET
+hset interstellar:vhost:localhost:3000:/form commands "cd /path/where/your/build/is && ./form"
 ```
 Now you can test:    
 In browser: http://localhost:3000/form   
