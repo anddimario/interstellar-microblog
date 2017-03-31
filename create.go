@@ -1,27 +1,37 @@
 package main
 
 import (
-	"github.com/go-redis/redis"
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"os"
-	"database/sql"
+
+	"github.com/go-redis/redis"
 	_ "github.com/mattn/go-sqlite3"
-        "strings"
 )
 
 func main() {
-        //argsWithoutProg := os.Args[1:]
+	//argsWithoutProg := os.Args[1:]
 	client := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
 
+	// get last argument (the interstellar argument json)
+	last := len(os.Args) - 1
+	// Get and decode the json body passed by arguments
+	byt := []byte(os.Args[last])
+	var dat map[string]map[string]interface{}
+	if err := json.Unmarshal(byt, &dat); err != nil {
+		panic(err)
+	}
+
 	// Get configuration (path for sqlite db)
-	db_path, err := client.Get("config:" + os.Args[1] + ":db_path").Result()
+	db_path, err := client.Get("config:" + dat["headers"]["host"].(string) + ":db_path").Result()
 
 	if err == redis.Nil {
-		fmt.Println("key2 does not exists", os.Args[1])
+		fmt.Println("key2 does not exists", dat["headers"]["host"].(string))
 	} else if err != nil {
 		panic(err)
 	} else {
@@ -40,11 +50,8 @@ func main() {
 			fmt.Println(err)
 		}
 		defer stmt.Close()
-		clean1 := strings.Replace(os.Args[2], "\"", "", -1)
-		split1 := strings.Split(clean1, ",")
-		title := strings.Replace(split1[0], "{title:", "", -1)
-		clean2 := strings.Replace(split1[1], "text:", "", -1)
-		text := strings.Replace(clean2, "}", "", -1)
+		title := dat["body"]["title"]
+		text := dat["body"]["text"]
 		_, err = stmt.Exec(title, text)
 		if err != nil {
 			fmt.Println(err)
